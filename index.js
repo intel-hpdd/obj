@@ -80,6 +80,17 @@
   }
   obj.clone = clone;
 
+  function values (x) {
+    if (!isObject(x) && !Array.isArray(x))
+      throw new TypeError('Obj.values must receive an object.');
+
+    return Object.keys(x)
+      .map(function mapValues (key) {
+             return x[key];
+           });
+  }
+  obj.values = values;
+
   function isObject (item) {
     var type = Object.prototype.toString.call(item);
     type = type.substring(type.indexOf(' ') + 1, type.length - 1);

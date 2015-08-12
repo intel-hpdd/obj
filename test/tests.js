@@ -344,4 +344,27 @@ describe('obj module', function () {
       });
     });
   });
+
+  describe('values function', function () {
+    var myObj;
+    beforeEach(function () {
+      myObj = {
+        foo: 7,
+        bar: 'name',
+        baz: true
+      };
+    });
+
+    it('should extract the values from the object', function () {
+      expect(obj.values(myObj)).toEqual([7, 'name', true]);
+    });
+
+    it('should return the array back if an array is passed in', function () {
+      expect(obj.values([6, 3])).toEqual([6, 3]);
+    });
+
+    it('should throw an error if a non-object / array is passed in', function () {
+      expect(function () { obj.values(7); }).toThrowError(TypeError, 'Obj.values must receive an object.');
+    });
+  });
 });
