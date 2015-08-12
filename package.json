@@ -1,5 +1,5 @@
 {
-  "name": "obj",
+  "name": "@intel-js/obj",
   "version": "1.0.0",
   "description": "A lib used to perform common operations on objects",
   "main": "index.js",
