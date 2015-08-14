@@ -91,6 +91,16 @@
   }
   obj.values = values;
 
+  function pick (toPick, x) {
+    return toPick.reduce(function reducer (obj, p) {
+      if (p in x)
+        obj[p] = x[p];
+
+      return obj;
+    }, {});
+  }
+  obj.pick = pick;
+
   function isObject (item) {
     var type = Object.prototype.toString.call(item);
     type = type.substring(type.indexOf(' ') + 1, type.length - 1);

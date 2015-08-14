@@ -367,4 +367,31 @@ describe('obj module', function () {
       expect(function () { obj.values(7); }).toThrowError(TypeError, 'Obj.values must receive an object.');
     });
   });
+
+  describe('pick function', function () {
+    var o;
+
+    beforeEach(function () {
+      o = {
+        foo: 'bar',
+        bar: 'baz',
+        bap: 'boom'
+      };
+    });
+
+    it('should exist on obj', function () {
+      expect(obj.pick).toEqual(jasmine.any(Function));
+    });
+
+    it('should return the picked values', function () {
+      expect(obj.pick(['foo', 'bar'], o)).toEqual({
+        foo: 'bar',
+        bar: 'baz'
+      });
+    });
+
+    it('should return nothing if no matches', function () {
+      expect(obj.pick(['blap'], o)).toEqual({});
+    });
+  });
 });
