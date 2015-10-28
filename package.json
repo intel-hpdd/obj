@@ -1,14 +1,15 @@
 {
-  "name": "@intel-js/obj",
+  "name": "intel-obj",
   "version": "1.0.4",
   "description": "A lib used to perform common operations on objects",
   "main": "index.js",
   "scripts": {
     "test": "JASMINE_CONFIG_PATH=jasmine.json NODE_ENV=test jasmine",
     "jshint": "jshint --c ./.jshintrc --exclude-path ./.jshintignore .",
-    "jscs": "jscs .",
-    "ziplock": "../../node/ziplocker/bin/ziplocker --overrides.ziplockDir='../../../../chroma-externals/'",
-    "zipdev": "../../node/ziplocker/bin/zip-install-dev --overrides.ziplockDir='../../../../chroma-externals/'"
+    "jscs": "jscs ."
+  },
+  "publishConfig": {
+    "registry": "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-local"
   },
   "pre-commit": [
     "jscs",
@@ -17,7 +18,7 @@
   ],
   "repository" : {
     "type" : "git",
-    "url" : "https://github.com/intel-js/obj.git"
+    "url": "https://github.intel.com/IML/obj.git"
   },
   "author": "IML Team",
   "license": "MIT",
