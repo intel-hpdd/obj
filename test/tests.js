@@ -432,4 +432,35 @@ describe('obj module', function () {
       expect(obj.pickBy(fp.always(false), o)).toEqual({});
     });
   });
+
+  describe('map', function () {
+    var o;
+
+    beforeEach(function () {
+      o = {
+        foo: 'bar',
+        bar: 'baz',
+        bap: 'boom'
+      };
+    });
+
+    it('should exist on obj', function () {
+      expect(obj.map).toEqual(jasmine.any(Function));
+    });
+
+    it('should be curried', function () {
+      expect(obj.map(fp.__, fp.__)).toEqual(jasmine.any(Function));
+    });
+
+    it('should map values', function () {
+      var concat = fp.curry(2, ''.concat.bind(''));
+      var res = obj.map(concat(fp.__, 't'), o);
+
+      expect(res).toEqual({
+        foo: 'bart',
+        bar: 'bazt',
+        bap: 'boomt'
+      });
+    });
+  });
 });

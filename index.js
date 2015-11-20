@@ -112,6 +112,14 @@
   });
   obj.pick = pick;
 
+  var map = fp.curry(2, function map (fn, obj) {
+    return Object.keys(obj).reduce(function reducer (out, key) {
+      out[key] = fn(obj[key], key);
+      return out;
+    }, {});
+  });
+  obj.map = map;
+
   function isObject (item) {
     var type = Object.prototype.toString.call(item);
     type = type.substring(type.indexOf(' ') + 1, type.length - 1);
