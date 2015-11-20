@@ -1,6 +1,7 @@
 'use strict';
 
 var obj = require('../index');
+var fp = require('intel-fp');
 
 describe('obj module', function () {
 
@@ -383,6 +384,10 @@ describe('obj module', function () {
       expect(obj.pick).toEqual(jasmine.any(Function));
     });
 
+    it('should be curried', function () {
+      expect(obj.pick(fp.__, fp.__)).toEqual(jasmine.any(Function));
+    });
+
     it('should return the picked values', function () {
       expect(obj.pick(['foo', 'bar'], o)).toEqual({
         foo: 'bar',
@@ -392,6 +397,39 @@ describe('obj module', function () {
 
     it('should return nothing if no matches', function () {
       expect(obj.pick(['blap'], o)).toEqual({});
+    });
+  });
+
+  describe('pickBy', function () {
+    var o;
+
+    beforeEach(function () {
+      o = {
+        foo: 'bar',
+        bar: 'baz',
+        bap: 'boom'
+      };
+    });
+
+    it('should exist on obj', function () {
+      expect(obj.pickBy).toEqual(jasmine.any(Function));
+    });
+
+    it('should be curried', function () {
+      expect(obj.pickBy(fp.__, fp.__)).toEqual(jasmine.any(Function));
+    });
+
+    it('should pick out objects that pass predicate', function () {
+      var res = obj.pickBy(fp.eqFn(fp.identity, fp.lensProp('length'), 3), o);
+
+      expect(res).toEqual({
+        foo: 'bar',
+        bar: 'baz'
+      });
+    });
+
+    it('should return an object if nothing passes', function () {
+      expect(obj.pickBy(fp.always(false), o)).toEqual({});
     });
   });
 });

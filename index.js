@@ -19,7 +19,7 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-(function () {
+(function (fp) {
   'use strict';
 
   var obj = {};
@@ -91,14 +91,25 @@
   }
   obj.values = values;
 
-  function pick (toPick, x) {
-    return toPick.reduce(function reducer (obj, p) {
-      if (p in x)
-        obj[p] = x[p];
+  var pickBy = fp.curry(2, function pickBy (pred, obj) {
+    var out = {};
 
-      return obj;
-    }, {});
-  }
+    Object
+      .keys(obj)
+      .forEach(function check (key) {
+        if (pred(obj[key], key))
+          out[key] = obj[key];
+      });
+
+    return out;
+  });
+  obj.pickBy = pickBy;
+
+  var pick = fp.curry(2, function pick (toPick, obj) {
+    return pickBy(function picker (val, key) {
+      return toPick.indexOf(key) !== -1;
+    }, obj);
+  });
   obj.pick = pick;
 
   function isObject (item) {
@@ -125,4 +136,5 @@
     angular.module('objModule', []).value('obj', obj);
   if (typeof window !== 'undefined')
     window.obj = obj;
-}());
+}(require != null ? require('intel-fp') : window.fp));
+

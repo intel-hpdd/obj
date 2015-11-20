@@ -1,6 +1,6 @@
 {
   "name": "intel-obj",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "A lib used to perform common operations on objects",
   "main": "index.js",
   "scripts": {
@@ -16,8 +16,8 @@
     "jshint",
     "test"
   ],
-  "repository" : {
-    "type" : "git",
+  "repository": {
+    "type": "git",
     "url": "https://github.intel.com/IML/obj.git"
   },
   "author": "IML Team",
@@ -28,5 +28,8 @@
     "jshint": "2.8.0",
     "krusty-jasmine-reporter": "1.0.0",
     "pre-commit": "1.1.2"
+  },
+  "dependencies": {
+    "intel-fp": "1.0.15"
   }
 }
