@@ -462,5 +462,44 @@ describe('obj module', function () {
         bap: 'boomt'
       });
     });
+
+    describe('transform', function () {
+      var o;
+
+      beforeEach(function () {
+        o = {
+          foo: 'bar',
+          bar: 'baz',
+          bap: 'boom'
+        };
+      });
+
+      it('should exist on obj', function () {
+        expect(obj.transform).toEqual(jasmine.any(Function));
+      });
+
+      it('should be curried', function () {
+        expect(obj.transform(fp.__, fp.__)).toEqual(jasmine.any(Function));
+      });
+
+      it('should keep if transformer returns an object', function () {
+        var result = obj.transform(function (val, key, out) {
+          if (key === 'foo')
+            out.boom = 'blaaah';
+
+          return out;
+        }, o);
+
+        expect(result).toEqual({
+          boom: 'blaaah'
+        });
+      });
+
+      it('should return nothing if transformer does not return obj', function () {
+        var result = obj.transform(fp.always(null), o);
+
+        expect(result).toEqual({});
+      });
+    });
   });
 });

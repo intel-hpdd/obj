@@ -91,17 +91,22 @@
   }
   obj.values = values;
 
+  var transform = fp.curry(2, function transform (fn, obj) {
+    return Object.keys(obj).reduce(function reducer (out, key) {
+      var r = fn(obj[key], key, out);
+
+      return isObject(r) ? r : out;
+    }, {});
+  });
+  obj.transform = transform;
+
   var pickBy = fp.curry(2, function pickBy (pred, obj) {
-    var out = {};
+    return transform(function transformer (val, key, out) {
+      if (pred(val, key))
+        out[key] = val;
 
-    Object
-      .keys(obj)
-      .forEach(function check (key) {
-        if (pred(obj[key], key))
-          out[key] = obj[key];
-      });
-
-    return out;
+      return out;
+    }, obj);
   });
   obj.pickBy = pickBy;
 
@@ -113,10 +118,10 @@
   obj.pick = pick;
 
   var map = fp.curry(2, function map (fn, obj) {
-    return Object.keys(obj).reduce(function reducer (out, key) {
-      out[key] = fn(obj[key], key);
+    return transform(function transformer (val, key, out) {
+      out[key] = fn(val, key);
       return out;
-    }, {});
+    }, obj);
   });
   obj.map = map;
 
