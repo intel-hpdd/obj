@@ -91,17 +91,20 @@
   }
   obj.values = values;
 
-  var transform = fp.curry(2, function transform (fn, obj) {
+  var reduce = fp.curry(3, function reduce (accum, fn, obj) {
+    if (typeof accum === 'function')
+      accum = accum();
+
     return Object.keys(obj).reduce(function reducer (out, key) {
       var r = fn(obj[key], key, out);
 
-      return isObject(r) ? r : out;
-    }, {});
+      return Array.isArray(r) || isObject(r) ? r : out;
+    }, accum);
   });
-  obj.transform = transform;
+  obj.reduce = reduce;
 
   var pickBy = fp.curry(2, function pickBy (pred, obj) {
-    return transform(function transformer (val, key, out) {
+    return reduce({}, function reducer (val, key, out) {
       if (pred(val, key))
         out[key] = val;
 
@@ -118,7 +121,7 @@
   obj.pick = pick;
 
   var map = fp.curry(2, function map (fn, obj) {
-    return transform(function transformer (val, key, out) {
+    return reduce({}, function reducer (val, key, out) {
       out[key] = fn(val, key);
       return out;
     }, obj);

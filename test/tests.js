@@ -463,7 +463,7 @@ describe('obj module', function () {
       });
     });
 
-    describe('transform', function () {
+    describe('reduce', function () {
       var o;
 
       beforeEach(function () {
@@ -475,15 +475,15 @@ describe('obj module', function () {
       });
 
       it('should exist on obj', function () {
-        expect(obj.transform).toEqual(jasmine.any(Function));
+        expect(obj.reduce).toEqual(jasmine.any(Function));
       });
 
       it('should be curried', function () {
-        expect(obj.transform(fp.__, fp.__)).toEqual(jasmine.any(Function));
+        expect(obj.reduce(fp.__, fp.__, fp.__)).toEqual(jasmine.any(Function));
       });
 
-      it('should keep if transformer returns an object', function () {
-        var result = obj.transform(function (val, key, out) {
+      it('should keep if reducer returns an object', function () {
+        var result = obj.reduce({}, function (val, key, out) {
           if (key === 'foo')
             out.boom = 'blaaah';
 
@@ -495,10 +495,20 @@ describe('obj module', function () {
         });
       });
 
-      it('should return nothing if transformer does not return obj', function () {
-        var result = obj.transform(fp.always(null), o);
+      it('should return nothing if reducer does not return obj', function () {
+        var result = obj.reduce({}, fp.always(null), o);
 
         expect(result).toEqual({});
+      });
+
+      it('should reduce an object to an array', function () {
+        var result = obj.reduce(fp.always([]), function (val, key, arr) {
+          arr.push([key, val]);
+        }, o);
+
+        expect(result).toEqual([
+          [ 'foo', 'bar' ], [ 'bar', 'baz' ], [ 'bap', 'boom' ]
+        ]);
       });
     });
   });
