@@ -149,5 +149,5 @@
     angular.module('objModule', []).value('obj', obj);
   if (typeof window !== 'undefined')
     window.obj = obj;
-}(require != null ? require('intel-fp') : window.fp));
+}(typeof require !== 'undefined' ? require('intel-fp') : window.fp));
 
