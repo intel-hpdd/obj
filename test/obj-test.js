@@ -1,14 +1,16 @@
-'use strict';
+// @flow
 
-var obj = require('../index');
-var fp = require('intel-fp');
+import {env, jasmine} from '../test';
+const {describe, beforeEach, it, expect} = env;
 
-describe('obj module', function () {
+import * as obj from '../';
+import * as fp from 'intel-fp/fp';
 
-  describe('merge function', function () {
+describe('obj module', () => {
+  describe('merge function', () => {
 
     var obj1, obj2, obj3, obj4, obj5;
-    beforeEach(function () {
+    beforeEach(() => {
       obj1 = {
         name: 'will',
         age: 33,
@@ -51,8 +53,7 @@ describe('obj module', function () {
         key: 'val',
         names: ['will', 'nerissa', 'mariela', 'kali'],
         transportation: ['bike', 'car', 'bus'],
-        fn: function funky () {
-          console.log('uh uh uh, this isn\'t serializable.');
+        fn () {
           return 1;
         }
       };
@@ -71,12 +72,15 @@ describe('obj module', function () {
       };
     });
 
-    it('should throw an error when the rhs has a cycle', function () {
+    it('should throw an error when the rhs has a cycle', () => {
+      // $FlowIgnore
       obj3.prop1.prop2.prop3 = obj3.prop1;
-      expect(function () { obj.merge(obj1, obj3); }).toThrow(new Error('Cycle detected, cannot merge.'));
+      expect(() => {
+        obj.merge(obj1, obj3);
+      }).toThrow(new Error('Cycle detected, cannot merge.'));
     });
 
-    it('should merge two objects together with a mutually exclusive domain of keys', function () {
+    it('should merge two objects together with a mutually exclusive domain of keys', () => {
       obj.merge(obj1, obj2);
       expect(obj1).toEqual(
         {
@@ -99,7 +103,7 @@ describe('obj module', function () {
       );
     });
 
-    it('should merge objects together with overlapping keys', function () {
+    it('should merge objects together with overlapping keys', () => {
       obj.merge(obj1, obj2, obj3, obj4);
       expect(obj1).toEqual({
         name: 'will',
@@ -131,7 +135,7 @@ describe('obj module', function () {
       });
     });
 
-    it('should verify that objects passed in after the first argument are not mutated', function () {
+    it('should verify that objects passed in after the first argument are not mutated', () => {
       obj.merge(obj1, obj3);
       expect(obj3).toEqual({
         age: 2,
@@ -151,8 +155,8 @@ describe('obj module', function () {
       });
     });
 
-    it('should be variadic', function () {
-      var result = obj.merge({}, {}, {}, {}, {}, {}, {}, {a: 1}, {b: 2}, obj1, {name: 'robert'});
+    it('should be variadic', () => {
+      var result = obj.merge({}, {}, {}, {}, {}, {}, {}, { a: 1 }, { b: 2 }, obj1, { name: 'robert' });
       expect(result).toEqual({
         a: 1,
         b: 2,
@@ -171,7 +175,7 @@ describe('obj module', function () {
       });
     });
 
-    it('should function as a "defaults" operation', function () {
+    it('should function as a "defaults" operation', () => {
       var defaults = {
         a: 1,
         b: 2
@@ -190,16 +194,16 @@ describe('obj module', function () {
       });
     });
 
-    it('should return the same object if it is only passed one object', function () {
+    it('should return the same object if it is only passed one object', () => {
       var result = obj.merge(obj1);
       expect(result).toEqual(obj1);
     });
 
-    it('should return undefined if it doesn\'t receive any args', function () {
+    it('should return undefined if it doesn\'t receive any args', () => {
       expect(obj.merge()).toEqual(undefined);
     });
 
-    it('should overwrite arrays', function () {
+    it('should overwrite arrays', () => {
       obj.merge(obj4, obj5);
       expect(obj4).toEqual({
         key: 'val',
@@ -217,18 +221,20 @@ describe('obj module', function () {
       });
     });
 
-    it('should be a reference to the original object and not a copy', function () {
+    it('should be a reference to the original object and not a copy', () => {
       var result = obj.merge(obj1, obj2);
       expect(result).toBe(obj1);
     });
 
-    ['7', 7, [1, 2, 3], function () {}, true].forEach(function (item) {
-      it('should overwrite the object if you pass in a non object', function () {
+    ['7', 7, [1, 2, 3], () => {
+    }, true
+    ].forEach((item) => {
+      it('should overwrite the object if you pass in a non object', () => {
         expect(obj.merge(obj1, item)).toEqual(item);
       });
     });
 
-    it('should not preserve any object references', function () {
+    it('should not preserve any object references', () => {
       var x = {};
       var y = { foo: { bar: 'baz' } };
 
@@ -237,7 +243,7 @@ describe('obj module', function () {
       expect(x.foo).not.toBe(y.foo);
     });
 
-    it('should not preserve nested object references', function () {
+    it('should not preserve nested object references', () => {
       var x = {
         foo: {}
       };
@@ -255,7 +261,7 @@ describe('obj module', function () {
       expect(x.foo.bar).not.toBe(y.foo.bar);
     });
 
-    it('should not preserve any array references', function () {
+    it('should not preserve any array references', () => {
       var x = {};
       var y = { foo: [1, 2] };
 
@@ -264,7 +270,7 @@ describe('obj module', function () {
       expect(x.foo).not.toBe(y.foo);
     });
 
-    it('should not preserve obj references inside arrays', function () {
+    it('should not preserve obj references inside arrays', () => {
       var x = {};
       var y = { foo: [{}] };
 
@@ -274,15 +280,15 @@ describe('obj module', function () {
     });
   });
 
-  describe('clone function', function () {
+  describe('clone function', () => {
 
     var obj1, items;
-    beforeEach(function () {
+    beforeEach(() => {
       obj1 = {
         name: 'will',
         residence: {
           address: '123 ocean dr.',
-          state: 'FL',
+          state: 'FL'
         },
         prop1: {
           prop2: {
@@ -297,7 +303,7 @@ describe('obj module', function () {
       items = ['sword', 'shield', 'potion'];
     });
 
-    it('should clone an object', function () {
+    it('should clone an object', () => {
       expect(obj.clone(obj1)).toEqual({
         name: 'will',
         residence: {
@@ -315,25 +321,28 @@ describe('obj module', function () {
       });
     });
 
-    it('should clone an array', function () {
+    it('should clone an array', () => {
       expect(obj.clone(items)).toEqual(['sword', 'shield', 'potion']);
     });
 
-    it('should be a copy of the object and not a reference to it', function () {
+    it('should be a copy of the object and not a reference to it', () => {
       expect(obj.clone(obj1)).not.toBe(obj1);
     });
 
-    it('should be a copy of the array and not a reference to it', function () {
+    it('should be a copy of the array and not a reference to it', () => {
       expect(obj.clone(items)).not.toBe(items);
     });
 
-    it('should throw an error if a cycle is detected', function () {
+    it('should throw an error if a cycle is detected', () => {
+      // $FlowIgnore
       obj1.prop1.prop2.prop3 = obj1.prop1;
-      expect(function () { obj.clone(obj1); }).toThrowError(TypeError, 'Converting circular structure to JSON');
+      expect(() => obj.clone(obj1))
+        .toThrowError(TypeError, 'Converting circular structure to JSON');
     });
 
-    it('should not serialize non-serializable items', function () {
-      obj1.prop1 = function prop1Fn () {};
+    it('should not serialize non-serializable items', () => {
+      // $FlowIgnore
+      obj1.prop1 = () =>
 
       expect(obj.clone(obj1)).toEqual({
         name: 'will',
@@ -346,9 +355,9 @@ describe('obj module', function () {
     });
   });
 
-  describe('values function', function () {
+  describe('values function', () => {
     var myObj;
-    beforeEach(function () {
+    beforeEach(() => {
       myObj = {
         foo: 7,
         bar: 'name',
@@ -356,23 +365,19 @@ describe('obj module', function () {
       };
     });
 
-    it('should extract the values from the object', function () {
+    it('should extract the values from the object', () => {
       expect(obj.values(myObj)).toEqual([7, 'name', true]);
     });
 
-    it('should return the array back if an array is passed in', function () {
+    it('should return the array back if an array is passed in', () => {
       expect(obj.values([6, 3])).toEqual([6, 3]);
-    });
-
-    it('should throw an error if a non-object / array is passed in', function () {
-      expect(function () { obj.values(7); }).toThrowError(TypeError, 'Obj.values must receive an object.');
     });
   });
 
-  describe('pick function', function () {
+  describe('pick function', () => {
     var o;
 
-    beforeEach(function () {
+    beforeEach(() => {
       o = {
         foo: 'bar',
         bar: 'baz',
@@ -380,30 +385,30 @@ describe('obj module', function () {
       };
     });
 
-    it('should exist on obj', function () {
+    it('should exist on obj', () => {
       expect(obj.pick).toEqual(jasmine.any(Function));
     });
 
-    it('should be curried', function () {
+    it('should be curried', () => {
       expect(obj.pick(fp.__, fp.__)).toEqual(jasmine.any(Function));
     });
 
-    it('should return the picked values', function () {
+    it('should return the picked values', () => {
       expect(obj.pick(['foo', 'bar'], o)).toEqual({
         foo: 'bar',
         bar: 'baz'
       });
     });
 
-    it('should return nothing if no matches', function () {
+    it('should return nothing if no matches', () => {
       expect(obj.pick(['blap'], o)).toEqual({});
     });
   });
 
-  describe('pickBy', function () {
+  describe('pickBy', () => {
     var o;
 
-    beforeEach(function () {
+    beforeEach(() => {
       o = {
         foo: 'bar',
         bar: 'baz',
@@ -411,15 +416,15 @@ describe('obj module', function () {
       };
     });
 
-    it('should exist on obj', function () {
+    it('should exist on obj', () => {
       expect(obj.pickBy).toEqual(jasmine.any(Function));
     });
 
-    it('should be curried', function () {
+    it('should be curried', () => {
       expect(obj.pickBy(fp.__, fp.__)).toEqual(jasmine.any(Function));
     });
 
-    it('should pick out objects that pass predicate', function () {
+    it('should pick out objects that pass predicate', () => {
       var res = obj.pickBy(fp.eqFn(fp.identity, fp.lensProp('length'), 3), o);
 
       expect(res).toEqual({
@@ -428,15 +433,15 @@ describe('obj module', function () {
       });
     });
 
-    it('should return an object if nothing passes', function () {
+    it('should return an object if nothing passes', () => {
       expect(obj.pickBy(fp.always(false), o)).toEqual({});
     });
   });
 
-  describe('map', function () {
+  describe('map', () => {
     var o;
 
-    beforeEach(function () {
+    beforeEach(() => {
       o = {
         foo: 'bar',
         bar: 'baz',
@@ -444,15 +449,15 @@ describe('obj module', function () {
       };
     });
 
-    it('should exist on obj', function () {
+    it('should exist on obj', () => {
       expect(obj.map).toEqual(jasmine.any(Function));
     });
 
-    it('should be curried', function () {
+    it('should be curried', () => {
       expect(obj.map(fp.__, fp.__)).toEqual(jasmine.any(Function));
     });
 
-    it('should map values', function () {
+    it('should map values', () => {
       var concat = fp.curry(2, ''.concat.bind(''));
       var res = obj.map(concat(fp.__, 't'), o);
 
@@ -463,10 +468,10 @@ describe('obj module', function () {
       });
     });
 
-    describe('reduce', function () {
+    describe('reduce', () => {
       var o;
 
-      beforeEach(function () {
+      beforeEach(() => {
         o = {
           foo: 'bar',
           bar: 'baz',
@@ -474,16 +479,16 @@ describe('obj module', function () {
         };
       });
 
-      it('should exist on obj', function () {
+      it('should exist on obj', () => {
         expect(obj.reduce).toEqual(jasmine.any(Function));
       });
 
-      it('should be curried', function () {
+      it('should be curried', () => {
         expect(obj.reduce(fp.__, fp.__, fp.__)).toEqual(jasmine.any(Function));
       });
 
-      it('should keep if reducer returns an object', function () {
-        var result = obj.reduce({}, function (val, key, out) {
+      it('should keep if reducer returns an object', () => {
+        const result = obj.reduce({}, (val, key, out) => {
           if (key === 'foo')
             out.boom = 'blaaah';
 
@@ -495,19 +500,19 @@ describe('obj module', function () {
         });
       });
 
-      it('should return nothing if reducer does not return obj', function () {
+      it('should return nothing if reducer does not return obj', () => {
         var result = obj.reduce({}, fp.always(null), o);
 
         expect(result).toEqual({});
       });
 
-      it('should reduce an object to an array', function () {
-        var result = obj.reduce(fp.always([]), function (val, key, arr) {
+      it('should reduce an object to an array', () => {
+        var result = obj.reduce(fp.always([]), (val, key, arr) => {
           arr.push([key, val]);
         }, o);
 
         expect(result).toEqual([
-          [ 'foo', 'bar' ], [ 'bar', 'baz' ], [ 'bap', 'boom' ]
+          ['foo', 'bar'], ['bar', 'baz'], ['bap', 'boom']
         ]);
       });
     });
