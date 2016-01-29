@@ -3,8 +3,8 @@
 import {env, jasmine} from '../test';
 const {describe, beforeEach, it, expect} = env;
 
-import * as obj from '../';
-import * as fp from 'intel-fp/fp';
+import * as obj from '../obj';
+import * as fp from 'intel-fp';
 
 describe('obj module', () => {
   describe('merge function', () => {
@@ -425,7 +425,10 @@ describe('obj module', () => {
     });
 
     it('should pick out objects that pass predicate', () => {
-      var res = obj.pickBy(fp.eqFn(fp.identity, fp.lensProp('length'), 3), o);
+      var res = obj
+        .pickBy(
+          fp.eqFn(fp.identity, fp.view(fp.lensProp('length')), 3), o
+        );
 
       expect(res).toEqual({
         foo: 'bar',

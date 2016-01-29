@@ -21,7 +21,7 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import {curry} from 'intel-fp/fp';
+import {curry} from 'intel-fp';
 
 type ArrayAny = Array<any>;
 type Iterable = Object | ArrayAny;

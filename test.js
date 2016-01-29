@@ -19,18 +19,7 @@ if (process.env.RUNNER === 'CI') {
   jasmine.jasmine.getEnv().addReporter(junitReporter);
 }
 
-var path = require('path');
-var base = path.join.bind(path, __dirname);
-
-require('babel-register')({
-  ignore: base('node_modules/'),
-  only: [
-    base('node_modules/intel-fp/fp.js'),
-    base('test/*.js'),
-    base('*.js')
-  ]
-});
-
+require('babel-register');
 
 jasmine.loadConfig({
   spec_dir: 'test',

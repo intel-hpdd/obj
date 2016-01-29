@@ -2,12 +2,12 @@
   "name": "intel-obj",
   "version": "4.0.0",
   "description": "A lib used to perform common operations on objects",
-  "main": "obj.js",
+  "main": "dist/obj.js",
   "scripts": {
     "test": "NODE_ENV=test ./test.js",
     "eslint": "eslint ./",
     "jscs": "jscs .",
-    "prepublish": "./bin/build"
+    "prepublish": "./bin/build && cp ./obj.js ./dist/obj.js.flow"
   },
   "publishConfig": {
     "registry": "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-local"
@@ -39,6 +39,6 @@
     "pre-commit": "1.1.2"
   },
   "dependencies": {
-    "intel-fp": "3.3.2"
+    "intel-fp": "4.0.0"
   }
 }

@@ -5,7 +5,7 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var babel = require('babel-core');
 
-var index = require.resolve('../');
+var index = require.resolve('../obj.js');
 
 var licenseStatement = '/*\n\
 INTEL CONFIDENTIAL\n\
