@@ -121,7 +121,7 @@ export const map = curry(2, function map (fn: Function, obj: Iterable) {
   }, obj);
 });
 
-function isObject (item: any): boolean {
+export function isObject (item: any): boolean {
   var type = Object.prototype.toString.call(item);
   type = type.substring(type.indexOf(' ') + 1, type.length - 1);
   return type === 'Object';
