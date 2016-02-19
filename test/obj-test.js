@@ -519,5 +519,27 @@ describe('obj module', () => {
         ]);
       });
     });
+
+    describe('isObject function', () => {
+      it('should expect an object to be an object', () => {
+        expect(obj.isObject({})).toBe(true);
+      });
+
+      it('should expect an array to not be an object', () => {
+        expect(obj.isObject([])).toBe(false);
+      });
+
+      it('should expect null to not be an object', () => {
+        expect(obj.isObject(null)).toBe(false);
+      });
+
+      it('should expect undefined to not be an object', () => {
+        expect(obj.isObject(undefined)).toBe(false);
+      });
+
+      it('should expect a constructed object to be an object', () => {
+        expect(obj.isObject(new Object())).toBe(true);
+      });
+    });
   });
 });
