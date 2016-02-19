@@ -1,9 +1,8 @@
 // @flow
 
-import {env, jasmine} from '../test';
-const {describe, beforeEach, it, expect} = env;
+import {describe, beforeEach, it, expect, jasmine} from './jasmine';
 
-import * as obj from '../obj';
+import * as obj from '../source/obj';
 import * as fp from 'intel-fp';
 
 describe('obj module', () => {

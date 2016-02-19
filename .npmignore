@@ -6,3 +6,5 @@ node_modules
 .jscsrc
 .flowconfig
 .babelrc
+test
+source
