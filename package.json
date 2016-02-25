@@ -1,6 +1,6 @@
 {
   "name": "intel-obj",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "A lib used to perform common operations on objects",
   "main": "dist/source/obj.js",
   "scripts": {
