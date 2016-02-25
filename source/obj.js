@@ -31,15 +31,13 @@ export function merge (): Iterable {
 
   var args = new Array(arguments.length);
 
-  for (var i = 0, l = arguments.length; i < l; i++) {
+  for (var i = 0, l = arguments.length; i < l; i++)
     args[i] = arguments[i];
-  }
 
   var target = args[0];
   var numObjects = args.length;
-  for (var index = 1; index < numObjects; index++) {
+  for (var index = 1; index < numObjects; index++)
     target = mergeItem(target, args[index]);
-  }
 
   return target;
 
@@ -100,9 +98,8 @@ export const reduce = curry(3, function reduce (accum: any, fn: Function, obj: O
 
 export const pickBy = curry(2, function pickBy (pred: Function, obj: Iterable): Iterable {
   return reduce({}, function reducer (val, key, out) {
-    if (pred(val, key)) {
+    if (pred(val, key))
       out[key] = val;
-    }
 
     return out;
   }, obj);
@@ -130,9 +127,8 @@ export function isObject (item: any): boolean {
 function cloneArray (xs: ArrayAny, merger: Function): ArrayAny {
   var out = [];
 
-  for (var index = 0; index < xs.length; index++) {
+  for (var index = 0; index < xs.length; index++)
     out[index] = merger(null, xs[index]);
-  }
 
   return out;
 }

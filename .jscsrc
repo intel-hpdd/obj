@@ -1,12 +1,5 @@
 {
   "esnext": true,
-  "requireCurlyBraces": [
-    "for",
-    "while",
-    "do",
-    "try",
-    "catch"
-  ],
   "requireSpaceAfterKeywords": [
     "if",
     "else",
