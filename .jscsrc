@@ -77,6 +77,7 @@
   "requireCapitalizedConstructors": true,
   "excludeFiles": [
     "node_modules/**",
-    "dist/**"
+    "dist/**",
+    "coverage/**"
   ]
 }
