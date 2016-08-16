@@ -1,6 +1,12 @@
 // @flow
 
-import {describe, beforeEach, it, expect, jasmine} from './jasmine';
+import {
+  describe,
+  beforeEach,
+  it,
+  expect,
+  jasmine
+} from './jasmine.js';
 
 import * as obj from '../source/obj';
 import * as fp from 'intel-fp';
@@ -367,10 +373,6 @@ describe('obj module', () => {
     it('should extract the values from the object', () => {
       expect(obj.values(myObj)).toEqual([7, 'name', true]);
     });
-
-    it('should return the array back if an array is passed in', () => {
-      expect(obj.values([6, 3])).toEqual([6, 3]);
-    });
   });
 
   describe('pick function', () => {
@@ -460,7 +462,7 @@ describe('obj module', () => {
     });
 
     it('should map values', () => {
-      var concat = fp.curry(2, ''.concat.bind(''));
+      var concat = fp.curry2(''.concat.bind(''));
       var res = obj.map(concat(fp.__, 't'), o);
 
       expect(res).toEqual({
@@ -485,12 +487,8 @@ describe('obj module', () => {
         expect(obj.reduce).toEqual(jasmine.any(Function));
       });
 
-      it('should be curried', () => {
-        expect(obj.reduce(fp.__, fp.__, fp.__)).toEqual(jasmine.any(Function));
-      });
-
       it('should keep if reducer returns an object', () => {
-        const result = obj.reduce({}, (val, key, out) => {
+        const result = obj.reduce(() => ({}), (val, key, out) => {
           if (key === 'foo')
             out.boom = 'blaaah';
 
@@ -502,19 +500,20 @@ describe('obj module', () => {
         });
       });
 
-      it('should return nothing if reducer does not return obj', () => {
-        var result = obj.reduce({}, fp.always(null), o);
-
-        expect(result).toEqual({});
-      });
-
       it('should reduce an object to an array', () => {
-        var result = obj.reduce(fp.always([]), (val, key, arr) => {
-          arr.push([key, val]);
-        }, o);
+        const result = obj.reduceArr(
+          fp.always([]),
+          (val, key:string, arr:string[]):string[] => arr.concat([key, val]),
+          o
+        );
 
         expect(result).toEqual([
-          ['foo', 'bar'], ['bar', 'baz'], ['bap', 'boom']
+          'foo',
+          'bar',
+          'bar',
+          'baz',
+          'bap',
+          'boom'
         ]);
       });
     });

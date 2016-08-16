@@ -3,8 +3,10 @@ node_modules
 .eslintignore
 .editorconfig
 .eslintrc
-.jscsrc
 .flowconfig
 .babelrc
+.gitignore
 /source
 /test
+/coverage
+run_test.sh

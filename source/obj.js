@@ -21,12 +21,13 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import {curry} from 'intel-fp';
+
+import * as fp from 'intel-fp';
 
 type ArrayAny = Array<any>;
 type Iterable = Object | ArrayAny;
 
-export function merge (): Iterable {
+export function merge ():Iterable {
   var visited = [];
 
   var args = new Array(arguments.length);
@@ -74,57 +75,84 @@ export function merge (): Iterable {
   }
 }
 
-export function clone (x: Iterable): Iterable {
-  return JSON.parse(JSON.stringify(x));
-}
+export const clone = (x:Iterable):Iterable =>
+  JSON.parse(JSON.stringify(x));
 
-export function values (x: any): ArrayAny {
-  return Object.keys(x)
-    .map(function mapValues (key) {
-      return x[key];
-    });
-}
 
-export const reduce = curry(3, function reduce (accum: any, fn: Function, obj: Object) {
-  if (typeof accum === 'function')
-    accum = accum();
+export const values = (x:Object) =>
+  Object
+    .keys(x)
+    .map(key => x[key]);
 
-  return Object.keys(obj).reduce(function reducer (out, key) {
-    var r = fn(obj[key], key, out);
+export const reduceArr = fp.curry3(
+  function reduce <A, B:A[]> (
+    accum:() => B,
+    fn:(v:A, k:string, out:B) => B,
+    obj:Object
+  ):B {
+    return Object
+      .keys(obj)
+      .reduce(
+        (out, key) => fn(obj[key], key, out),
+        accum()
+      );
+  });
 
-    return Array.isArray(r) || isObject(r) ? r : out;
-  }, accum);
-});
 
-export const pickBy = curry(2, function pickBy (pred: Function, obj: Iterable): Iterable {
-  return reduce({}, function reducer (val, key, out) {
-    if (pred(val, key))
-      out[key] = val;
+export const reduce = fp.curry3(
+  function reduce <A:Object> (
+    accum:() => A,
+    fn:(v:any, k:string, out:A) => A,
+    obj:Object
+  ):A {
+    return Object
+      .keys(obj)
+      .reduce(
+        (out, key) => fn(obj[key], key, out),
+        accum()
+      );
+  });
 
-    return out;
-  }, obj);
-});
+export const pickBy = fp.curry2((pred:(v:any, k:string) => boolean, obj:Object):Object =>
+  reduce(
+    () => ({}),
+    (val, key:string, out:Object):Object => {
+      if (pred(val, key))
+        out[key] = val;
 
-export const pick = curry(2, function pick (toPick: ArrayAny, obj: Iterable): Iterable {
-  return pickBy(function picker (val, key) {
-    return toPick.indexOf(key) !== -1;
-  }, obj);
-});
+      return out;
+    },
+    obj
+  )
+);
 
-export const map = curry(2, function map (fn: Function, obj: Iterable) {
-  return reduce({}, function reducer (val, key, out) {
-    out[key] = fn(val, key);
-    return out;
-  }, obj);
-});
+export const pick = fp.curry2(
+  (toPick:string[], obj:Object):Object =>
+    pickBy(
+      (val, key:string):boolean => toPick.indexOf(key) !== -1,
+      obj
+    )
+);
 
-export function isObject (item: any): boolean {
+export const map = fp.curry2(
+  (fn:Function, obj:Object) =>
+    reduce(
+      () => ({}),
+      (val, key:string, out:Object):Object => {
+        out[key] = fn(val, key);
+        return out;
+      },
+      obj
+    )
+);
+
+export function isObject (item:any):boolean {
   var type = Object.prototype.toString.call(item);
   type = type.substring(type.indexOf(' ') + 1, type.length - 1);
   return type === 'Object';
 }
 
-function cloneArray (xs: ArrayAny, merger: Function): ArrayAny {
+function cloneArray (xs:ArrayAny, merger:Function):ArrayAny {
   var out = [];
 
   for (var index = 0; index < xs.length; index++)
