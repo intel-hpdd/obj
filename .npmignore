@@ -9,3 +9,4 @@ node_modules
 /source
 /test
 /coverage
+run_test.sh
