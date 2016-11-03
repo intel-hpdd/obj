@@ -390,10 +390,6 @@ describe('obj module', () => {
       expect(obj.pick).toEqual(jasmine.any(Function));
     });
 
-    it('should be curried', () => {
-      expect(obj.pick(fp.__, fp.__)).toEqual(jasmine.any(Function));
-    });
-
     it('should return the picked values', () => {
       expect(obj.pick(['foo', 'bar'], o)).toEqual({
         foo: 'bar',
@@ -419,10 +415,6 @@ describe('obj module', () => {
 
     it('should exist on obj', () => {
       expect(obj.pickBy).toEqual(jasmine.any(Function));
-    });
-
-    it('should be curried', () => {
-      expect(obj.pickBy(fp.__, fp.__)).toEqual(jasmine.any(Function));
     });
 
     it('should pick out objects that pass predicate', () => {
@@ -457,13 +449,11 @@ describe('obj module', () => {
       expect(obj.map).toEqual(jasmine.any(Function));
     });
 
-    it('should be curried', () => {
-      expect(obj.map(fp.__, fp.__)).toEqual(jasmine.any(Function));
-    });
-
     it('should map values', () => {
-      var concat = fp.curry2(''.concat.bind(''));
-      var res = obj.map(concat(fp.__, 't'), o);
+      var res = obj.map(
+        x => `${x}t`,
+        o
+      );
 
       expect(res).toEqual({
         foo: 'bart',
