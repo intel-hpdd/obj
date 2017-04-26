@@ -2,19 +2,12 @@
   "name": "@mfl/obj",
   "version": "6.0.1",
   "description": "A lib used to perform common operations on objects",
-  "main": "dist/source/obj.js",
+  "main": "source/obj.js",
   "scripts": {
-    "test": "NODE_ENV=test ./bin/test.js",
-    "test:dev": "npm run postversion && npm t",
+    "test": "jest",
     "eslint": "eslint ./",
     "flow": "flow",
-    "postversion": "./bin/build.sh",
-    "cover:dev": "npm run cover -- --reporter=html",
-    "cover": "NODE_ENV=test ./bin/build.sh cover && nyc --reporter=text npm t"
-  },
-  "nyc": {
-    "sourceMap": false,
-    "instrument": false
+    "cover": "NODE_ENV=test yarn test -- --coverage"
   },
   "publishConfig": {
     "access": "public"
@@ -22,33 +15,37 @@
   "pre-commit": [
     "eslint",
     "flow",
-    "test:dev"
+    "test"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.intel.com/MFL/obj.git"
+    "url": "https://github.com/intel-hpdd/obj.git"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@mfl)/"
+    ]
   },
   "author": "MFL Team",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "6.18.0",
-    "babel-core": "6.18.2",
-    "babel-eslint": "7.1.0",
-    "babel-plugin-__coverage__": "11.0.0",
-    "babel-plugin-transform-flow-strip-types": "6.18.0",
-    "babel-plugin-transform-strict-mode": "6.18.0",
-    "babel-preset-es2015": "6.18.0",
-    "eslint": "3.9.1",
-    "eslint-plugin-flow-vars": "0.5.0",
-    "eslint-plugin-flowtype": "2.25.0",
-    "flow-bin": "0.34.0",
-    "@mfl/flow-jasmine": "1.5.0",
-    "@mfl/jasmine-junit-reporter": "1.0.0",
-    "jasmine": "2.5.2",
-    "nyc": "8.4.0",
-    "pre-commit": "1.1.3"
-  },
-  "dependencies": {
-    "@mfl/fp": "7.0.0"
+    "@mfl/flow-jasmine": "1.6.0",
+    "babel-eslint": "7.2.3",
+    "babel-plugin-transform-flow-strip-types": "6.22.0",
+    "babel-preset-env": "^1.1.9",
+    "eslint": "3.19.0",
+    "eslint-config-prettier": "1.7.0",
+    "eslint-plugin-flowtype": "2.32.1",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-prettier": "2.0.1",
+    "flow-bin": "0.44.2",
+    "jasmine": "2.6.0",
+    "jest": "19.0.2",
+    "pre-commit": "1.2.2",
+    "prettier": "1.2.2"
   }
 }
