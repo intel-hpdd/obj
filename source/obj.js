@@ -71,7 +71,7 @@ export const clone = (x: Iterable): Iterable => JSON.parse(JSON.stringify(x));
 type Values<T> = ({ [key: any]: T }) => T[];
 export const values: Values<*> = xs => (Object.values(xs): any);
 
-type Entries<T> = ({ [key: any]: T }) => [string, T];
+type Entries<T> = ({ [key: any]: T }) => Array<[string, T]>;
 export const entries: Entries<*> = xs => (Object.entries(xs): any);
 
 export const reduceArr = function reduce<A, B: A[]>(
