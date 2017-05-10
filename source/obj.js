@@ -24,13 +24,8 @@
 type ArrayAny = Array<any>;
 type Iterable = Object | ArrayAny;
 
-export function merge(): Iterable {
+export function merge(...args: any[]): Iterable {
   const visited = [];
-
-  const args = new Array(arguments.length);
-
-  for (let i = 0, l = arguments.length; i < l; i++)
-    args[i] = arguments[i];
 
   let target = args[0];
   const numObjects = args.length;
@@ -73,7 +68,11 @@ export function merge(): Iterable {
 
 export const clone = (x: Iterable): Iterable => JSON.parse(JSON.stringify(x));
 
-export const values = (x: Object) => Object.keys(x).map(key => x[key]);
+type Values<T> = ({ [key: any]: T }) => T[];
+export const values: Values<*> = xs => (Object.values(xs): any);
+
+type Entries<T> = ({ [key: any]: T }) => [string, T];
+export const entries: Entries<*> = xs => (Object.entries(xs): any);
 
 export const reduceArr = function reduce<A, B: A[]>(
   accum: () => B,
