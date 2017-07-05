@@ -1,5 +1,5 @@
 {
-  "name": "@mfl/obj",
+  "name": "@iml/obj",
   "version": "6.0.3",
   "description": "A lib used to perform common operations on objects",
   "main": "source/obj.js",
@@ -27,13 +27,13 @@
       "/test"
     ],
     "transformIgnorePatterns": [
-      "/node_modules/(?!@mfl)/"
+      "/node_modules/(?!@iml)/"
     ]
   },
-  "author": "MFL Team",
+  "author": "IML Team",
   "license": "MIT",
   "devDependencies": {
-    "@mfl/flow-jasmine": "1.6.1",
+    "@iml/flow-jasmine": "1.6.1",
     "babel-eslint": "7.2.3",
     "babel-plugin-object-values-to-object-keys": "1.0.2",
     "babel-plugin-transform-flow-strip-types": "6.22.0",
